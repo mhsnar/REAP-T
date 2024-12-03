@@ -1,4 +1,4 @@
-# Robust to Early Termination Model Predictive Control Toolbox(REAP-T)
+# Robust to Early Termination Model Predictive Control Toolbox (REAP-T)
 
 ## 🛠️ Getting Started:
 1. **Extract the YALMIP zip file** to your desired location.
