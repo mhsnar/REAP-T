@@ -3,7 +3,7 @@ clc
 clear all
 close all
 % Create the figure for the UI
-fig = uifigure('Name', 'Discrete REAP Input Interface', 'Position', [100 100 800 600]);
+fig = uifigure('Name', 'REAP-T Graphical User Interface', 'Position', [100 100 800 600]);
 
 % Define default matrices
 defaultMatrixA = [1 1;0 1];
@@ -52,18 +52,29 @@ CInput = uitextarea(fig, 'Position', [130 340 250 70], 'Value', defaultMatrixCSt
 uilabel(fig, 'Text', 'Matrix D:', 'Position', [20 310 100 22]);
 DInput = uitextarea(fig, 'Position', [130 260 250 70], 'Value', defaultMatrixDStr);
 
+% uilabel(fig, 'Text', 'Initial Condistion:', 'Position', [20 230 100 22]);
+% x0 = uitextarea(fig, 'Position',[130 230 250 20], 'Value', defaultMatrixX0Str);
 
-uilabel(fig, 'Text', 'X constraint U.B.:', 'Position', [20 230 100 22]);
-XConstraintsU = uitextarea(fig, 'Position', [130 230 250 20],'Value', defaultMatrixXconstraintUStr);
+% Dropdown to select system's dynaimcs type (discrete/continuous)
+uilabel(fig, 'Text', 'Modeling Framework:', 'Position', [20 230 200 22]);
+DynamicsTypeDropdown = uidropdown(fig, ...
+    'Items', {'Continuous-Time', 'Discrete-Time'}, ...
+    'Position', [140 230 240 22]);
 
-uilabel(fig, 'Text', 'X constraint L.B.:', 'Position', [20 200 100 22]);
-XConstraintsL = uitextarea(fig, 'Position', [130 200 250 20],'Value', defaultMatrixXconstraintLStr);
+uilabel(fig, 'Text', 'Sampling Period:', 'Position',  [20 200 100 22]);
+DeltaTInput = uieditfield(fig, 'numeric', 'Position',  [130 200 250 22], 'Value', 0.2);
 
-uilabel(fig, 'Text', 'U Constraints U.B:', 'Position', [20 170 100 22]);
-UConstraintsU = uitextarea(fig, 'Position', [130 170 250 20],'Value', defaultMatrixUconstraintUStr);
+uilabel(fig, 'Text', 'X constraint U.B.:', 'Position', [20 170 100 22]);
+XConstraintsU = uitextarea(fig, 'Position', [130 170 250 22],'Value', defaultMatrixXconstraintUStr);
+% 
+uilabel(fig, 'Text', 'X constraint L.B.:', 'Position',  [20 140 100 22]);
+XConstraintsL = uitextarea(fig, 'Position',[130 140 250 22],'Value', defaultMatrixXconstraintLStr);
 
-uilabel(fig, 'Text', 'U constraint L.B.:', 'Position', [20 140 100 22]);
-UConstraintsL = uitextarea(fig, 'Position', [130 140 250 20],'Value', defaultMatrixUconstraintLStr);
+uilabel(fig, 'Text', 'U Constraints U.B:', 'Position',  [20 110 100 22]);
+UConstraintsU = uitextarea(fig, 'Position', [130 110 250 22],'Value', defaultMatrixUconstraintUStr);
+
+uilabel(fig, 'Text', 'U constraint L.B.:', 'Position',   [20 80 100 22]);
+UConstraintsL = uitextarea(fig, 'Position', [130 80 250 22],'Value', defaultMatrixUconstraintLStr);
 
 
 % Second column
@@ -73,81 +84,59 @@ QxInput = uitextarea(fig, 'Position', [530 500 250 70], 'Value', defaultMatrixQx
 uilabel(fig, 'Text', 'Matrix Qu:', 'Position', [420 470 100 22]);
 QuInput = uitextarea(fig, 'Position', [530 420 250 70], 'Value', defaultMatrixQuStr);
 
-% uilabel(fig, 'Text', 'Matrix Qv:', 'Position', [420 390 100 22]);
-% QvInput = uitextarea(fig, 'Position', [530 340 250 70], 'Value', defaultMatrixQvStr);
-uilabel(fig, 'Text', 'Initial Condistion:', 'Position', [420 390 100 22]);
-x0 = uitextarea(fig, 'Position',[530 340 250 70], 'Value', defaultMatrixX0Str);
+
+uilabel(fig, 'Text', 'Prediction Horizon:', 'Position', [420 390 150 22]);
+PredictionHorizonInput = uieditfield(fig, 'numeric', 'Position', [530 390 250 22], 'Value', 10);
 
 
 
+uilabel(fig, 'Text', '# Time Instants:', 'Position', [420 360 100 22]);
+nSimInput = uieditfield(fig, 'numeric', 'Position', [530 360 250 22], 'Value', 100);
 
-
-
-
-uilabel(fig, 'Text', 'Prediction Horizon:', 'Position', [420 310 150 22]);
-PredictionHorizonInput = uieditfield(fig, 'numeric', 'Position', [530 310 250 22], 'Value', 10);
-
+uilabel(fig, 'Text', 'Initial Condistion:', 'Position', [420 330 100 22]);
+x0 = uitextarea(fig, 'Position',[530 330 250 22], 'Value', defaultMatrixX0Str);
 
 % Dropdown to select desired input type
-uilabel(fig, 'Text', 'Desired Target:', 'Position', [420 280 150 22]);
+uilabel(fig, 'Text', 'Desired Target:', 'Position', [420 300 150 22]);
 InputTypeDropdown = uidropdown(fig, ...
     'Items', {'r (Reference)', 'xbar (Equilibrium Point)'}, ...
-    'Position', [530 280 250 22]);
+    'Position', [530 300 250 22]);
 
 % Field for xbar (hidden initially)
-uilabel(fig, 'Text', 'Equilibrium Point (xbar):', 'Position', [420 280 150 22], 'Visible', 'off', 'Tag', 'xbarLabel');
-xbarInput = uitextarea(fig, 'Position', [530 280 250 22], 'Visible', 'off', 'Value', '[0; 0]', 'Tag', 'xbarInput');
-
-uilabel(fig, 'Text', 'Desired:', 'Position',[420 250 100 22]);
-r = uitextarea(fig, 'Position', [530 250 250 22], 'Value', defaultMatrixrStr);
+uilabel(fig, 'Text', 'Equilibrium Point (xbar):', 'Position', [420 270 150 22], 'Visible', 'off', 'Tag', 'xbarLabel');
+xbarInput = uitextarea(fig, 'Position', [530 270 250 22], 'Visible', 'off', 'Value', '[0; 0]', 'Tag', 'xbarInput');
 
 
+% uilabel(fig, 'Text', 'Initial Condistion:', 'Position', [20 230 100 22]);
+% x0 = uitextarea(fig, 'Position',[130 230 250 20], 'Value', defaultMatrixX0Str);
+
+uilabel(fig, 'Text', 'Desired:', 'Position',[420 220 100 22]);
+Target = uitextarea(fig, 'Position', [530 220 250 22], 'Value', defaultMatrixrStr);
 
 
-
-% Omegastar input field
-% uilabel(fig, 'Text', 'Omegastar:', 'Position', [420 120 100 22]);
-% OmegastarInput = uieditfield(fig, 'numeric', 'Position', [530 120 250 22], 'Value', 20);
 
 % Dropdown to select mode (Linear TC/Lyapanov TC)
-uilabel(fig, 'Text', 'Terminal Constaint', 'Position', [420 150 100 22]);
+uilabel(fig, 'Text', 'Terminal Constaint', 'Position', [420 190 100 22]);
 ModeDropdown = uidropdown(fig, ...
     'Items', {'Prediction-Based', 'Lyapunov-Based'}, ...
-    'Position', [530 150 250 22]);
+    'Position', [530 190 250 22]);
 
-% Nested function to toggle the OmegastarInput field
-
-
-% Initialize Omegastar input state based on default dropdown value
-
-%
-% uilabel(fig, 'Text', 'Available Time:', 'Position', [420 210 100 22]);
-% ATInput = uieditfield(fig, 'numeric', 'Position', [530 210 250 22], 'Value', 0.2);
-
-uilabel(fig, 'Text', '# Time Instants:', 'Position', [420 210 100 22]);
-nSimInput = uieditfield(fig, 'numeric', 'Position', [530 210 250 22], 'Value', 100);
-
-%     uilabel(fig, 'Text', 'Initial Condistion:', 'Position', [420 180.5 100 22]);
-% x0 = uitextarea(fig, 'Position', [530 180.5 250 22], 'Value', defaultMatrixX0Str);
-
-uilabel(fig, 'Text', 'Sampling Period:', 'Position',  [420 180.5 100 22]);
-DeltaTInput = uieditfield(fig, 'numeric', 'Position', [530 180.5 250 22], 'Value', 0.2);
 
 
 % Add checkboxes for plot activation
-uilabel(fig, 'Text', 'Select Plots:', 'Position', [20 100 100 22]);
-checkbox1 = uicheckbox(fig, 'Text', 'States', 'Position', [130 100 100 22]);
-checkbox2 = uicheckbox(fig, 'Text', 'Control Inputs', 'Position', [200 100 100 22]);
-checkbox3 = uicheckbox(fig, 'Text', 'Output', 'Position', [130 70 100 22]);
-checkbox4 = uicheckbox(fig, 'Text', 'Sigma', 'Position', [200 70 100 22]);
+uilabel(fig, 'Text', 'Select Plots:', 'Position', [420 240-130 100 22]);
+checkbox1 = uicheckbox(fig, 'Text', 'States', 'Position', [640 240-130 100 22]);
+checkbox2 = uicheckbox(fig, 'Text', 'Control Inputs', 'Position', [530 240-130 100 22]);
+checkbox3 = uicheckbox(fig, 'Text', 'Output', 'Position', [640 210-120 100 22]);
+checkbox4 = uicheckbox(fig, 'Text', 'Sigma', 'Position', [530 210-130 100 22]);
 
 % Add a button to trigger the MPC calculation
 btn = uibutton(fig, 'Text', 'Run REAP', 'Position', [350 30 100 20], ...
-    'ButtonPushedFcn', @(btn, event) runMPCButtonPushed(AInput, BInput, CInput, DInput,XConstraintsU,XConstraintsL,UConstraintsU,UConstraintsL, x0,r,QxInput, QuInput, DeltaTInput, PredictionHorizonInput,InputTypeDropdown,ModeDropdown,nSimInput,checkbox1, checkbox2, checkbox3,checkbox4,xbarInput));
+    'ButtonPushedFcn', @(btn, event) runMPCButtonPushed(AInput, BInput, CInput, DInput,XConstraintsU,XConstraintsL,UConstraintsU,UConstraintsL, x0,Target,QxInput, QuInput, DeltaTInput, PredictionHorizonInput,InputTypeDropdown,DynamicsTypeDropdown,ModeDropdown,nSimInput,checkbox1, checkbox2, checkbox3,checkbox4,xbarInput));
 
 end
 
-function runMPCButtonPushed(AInput, BInput, CInput, DInput,XConstraintsU,XConstraintsL,UConstraintsU,UConstraintsL,x0,r, QxInput, QuInput, DeltaTInput, PredictionHorizonInput,InputTypeDropdown,ModeDropdown,nSimInput,checkbox1, checkbox2, checkbox3,checkbox4,xbarInput)
+function runMPCButtonPushed(AInput, BInput, CInput, DInput,XConstraintsU,XConstraintsL,UConstraintsU,UConstraintsL,x0,Target, QxInput, QuInput, DeltaTInput, PredictionHorizonInput,InputTypeDropdown,DynamicsTypeDropdown,ModeDropdown,nSimInput,checkbox1, checkbox2, checkbox3,checkbox4,xbarInput)
 % Parse the user inputs
 
 
@@ -158,7 +147,7 @@ D = str2num(char(DInput.Value)); %#ok<ST2NM>
 XConstraints = [str2num(char(XConstraintsL.Value)), str2num(char(XConstraintsU.Value))]; %#ok<ST2NM>
 UConstraints = [str2num(char(UConstraintsL.Value)),str2num(char(UConstraintsU.Value))]; %#ok<ST2NM>
 x0 = str2num(char(x0.Value)); %#ok<ST2NM>
-r = str2num(char(r.Value)); %#ok<ST2NM>
+Target = str2num(char(Target.Value)); %#ok<ST2NM>
 Qx = str2num(char(QxInput.Value)); %#ok<ST2NM>
 Qu = str2num(char(QuInput.Value)); %#ok<ST2NM>
 % Qv = str2num(char(QvInput.Value)); %#ok<ST2NM>
@@ -170,6 +159,14 @@ Prediction_Horizon = PredictionHorizonInput.Value;
 % AT = ATInput.Value;
 nSim = nSimInput.Value;
 
+if strcmp(DynamicsTypeDropdown.Value, 'Discrete')
+    G = ss(A, B, C, D,DeltaT);
+    Gc = d2c(G);
+    A = Gc.A;
+    B = Gc.B;
+    C = Gc.C;
+    D = Gc.D;
+end
 
 
 
@@ -186,18 +183,15 @@ NoI = size(Bd, 2);
 
 
 if strcmp(InputTypeDropdown.Value, 'r (Reference)')
-    % r = str2num(char(r.Value)); %#ok<ST2NM>
-else
-    % xbar = str2num(char(xbarInput.Value)); %#ok<ST2NM>
-    r = desiredCalculation(Ad, Bd, Cd, Dd,NoS,NoI,r); % Call the function to compute r
+    Target = desiredCalculation(Ad, Bd, Cd, Dd,NoS,NoI,Target); % Call the function to compute r  
 end
 
 
-Omegastar =  MPCFunctions.computeOmegastar(Ad, Bd,Cd,Dd,XConstraints,UConstraints,r, NoS,NoI, Qx, Qu); % Replace with actual algorithm
+Omegastar =  MPCFunctions.computeOmegastar(Ad, Bd,Cd,Dd,XConstraints,UConstraints,Target, NoS,NoI, Qx, Qu); % Replace with actual algorithm
 
 
 % Run the MPC
-[x, u_app] = runMPC(A, B, C, D,XConstraints,UConstraints,x0,r, Qx, Qu, Qv, DeltaT, Prediction_Horizon, Omegastar, nSim,checkbox1, checkbox2, checkbox3,checkbox4,ModeDropdown);
+[x, u_app] = runMPC(A, B, C, D,XConstraints,UConstraints,x0,Target, Qx, Qu, Qv, DeltaT, Prediction_Horizon, Omegastar, nSim,checkbox1, checkbox2, checkbox3,checkbox4,ModeDropdown);
 
 % Display results in a new figure
 resultFig = uifigure('Name', 'MPC Results', 'Position', [600 100 400 600]);
@@ -224,12 +218,17 @@ MPCFunctions.validateInputs(A, B, C, D, Qx, Qu, Qv, Xconstraint(:,end), Xconstra
 % Compute MPC
 if strcmp(ModeDropdown.Value, 'Lyapunov-Based') 
 
-[x, u_app,Sigmas] = MPCFunctions.computeMPCLyapanov(Ad, Bd, Cd,Dd,Xconstraint,Uconstraint,x0,r, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizon, Omegastar, n);
+[x, u_app,Sigmas,AllConstraints] = MPCFunctions.computeMPCLyapanov(Ad, Bd, Cd,Dd,Xconstraint,Uconstraint,x0,r, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizon, Omegastar, n);
 
 else
-[x, u_app,Sigmas] = MPCFunctions.computeMPC_Omegastar(Ad, Bd, Cd,Dd,Xconstraint,Uconstraint,x0,r, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizon, Omegastar, n);
+[x, u_app,Sigmas,AllConstraints] = MPCFunctions.computeMPC_Omegastar(Ad, Bd, Cd,Dd,Xconstraint,Uconstraint,x0,r, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizon, Omegastar, n);
 
 end
+% save('results.mat', 'x', 'u_app', 'Sigmas', 'AllConstraints');
+assignin('base', 'x', x);
+assignin('base', 'u_app', u_app);
+assignin('base', 'Sigmas', Sigmas);
+assignin('base', 'AllConstraints', AllConstraints);
 disp('REAP ended!');
 disp('Plotting the graphs has started!...');
 plotFlags = [checkbox1.Value, checkbox2.Value, checkbox3.Value,checkbox4.Value]; % Logical array for plot states
@@ -238,8 +237,7 @@ disp('Plotting the graphs ended!');
 end
 
 
-
-function r = desiredCalculation(Ad, Bd, Cd, Dd,NoS,NoI,xbar)
+function xbar = desiredCalculation(Ad, Bd, Cd, Dd,NoS,NoI,r)
 
 X=[Ad-eye(length(Ad)) Bd zeros(length(Ad),size(Cd,1));...
     Cd Dd -eye(size(Cd,1),size(Cd,1))];
@@ -248,6 +246,6 @@ MN=null(X,"rational");
 
 M1=MN(1:NoS,:);
 N=MN(1+NoS+NoI:end,:);
-Theta=pinv(M1)*xbar;
-r=N*Theta;
+Theta=pinv(N)*r;
+xbar=M1*Theta;
 end
