@@ -1,4 +1,4 @@
-function [x, u_app,Sigmas] = computeMPC_Omegastar(Ad, Bd, Cd,Dd,Xconstraints,Uconstraints,x0,r, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizion, Omegastar, n,C)
+function [x, u_app,Sigmas,AllConstraints] = computeMPC_Omegastar(Ad, Bd, Cd,Dd,Xconstraints,Uconstraints,x0,Xbar, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizion, Omegastar, n,C)
 % Compute MPC control action
 % Implement the MPC logic here based on the provided code
 disp('REAP has started!...');
@@ -9,13 +9,22 @@ u_des=zeros(NoI,1);
 
 x(:, 1) = [x0;zeros(NoI,1)];
 
-% Discretized system matrices for augmented system
+
+
+% State and control constraints
 Xconstraint_down=Xconstraints(:,1);
 Xconstraint=Xconstraints(:,end);
 
 Uconstraint_down=Uconstraints(:,1);
 Uconstraint=Uconstraints(:,end);
-% State and control constraints
+
+
+AllConstraints.XUB=Xconstraint;
+AllConstraints.XLB=Xconstraint_down;
+AllConstraints.UUB=Uconstraint;
+AllConstraints.ULB=Uconstraint_down;
+
+
 Xconstraint = [Xconstraint;1000* ones(NoI,1)];
 Xconstraint_down=[Xconstraint_down;-1000* ones(NoI,1)];
 
@@ -154,7 +163,7 @@ sigma_values=[];
 
 for inc=1:n
 
-    theta=pinv(N)*r;
+    theta=pinv(MN(1:NoS-NoI,:))*Xbar;
 
     xbar=M1*theta;
     ubar=M2*theta;
@@ -181,7 +190,7 @@ for inc=1:n
         x0=x(:,1);
         x_pr =Abar*x0+Bbar*hat_u ;
         % x_pr =Bbar * hat_u ;
-        errV=V-r;
+        errV=V-Xbar;
         ErrorV=(errV'*Qv*errV);
         norU=ubar-u_des;
         NormU= (norU'*norU);
@@ -223,7 +232,11 @@ for inc=1:n
         TConstraints = [TConstraints;M2*theta<=0.98*Uconstraint-1/beta;M2*theta>=+0.98*Uconstraint_down+1/beta;M1*theta<=0.98*Xconstraint-1/beta;M1*theta>=0.98*Xconstraint_down+1/beta];
 
         Constraint=[x_pr<=x_up-1/beta;x_pr>=x_down+1/beta;hat_u<=u_up-1/beta;hat_u>=u_down+1/beta];
+        AllConstraints.AllConstraintsX=[x_pr-x_up+1/beta;-x_pr+x_down+1/beta];
+        AllConstraints.AllConstraintsU=[hat_u-u_up+1/beta;-hat_u+u_down+1/beta];
 
+        AllConstraints.NoI=NoI;
+        AllConstraints.NoS=NoS-NoI;
         Constraints=[Constraint;TConstraints];
         opt=sdpsettings('showprogress',0,'verbose',0);
         sol=optimize(Constraints,sigma,opt);
@@ -246,13 +259,13 @@ for inc=1:n
     MM=0;
     hat_u0=hat_u;
     hatLambda0=hatLambda;
-    sigma_hat_u0 = CostF(r,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u0,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
+    sigma_hat_u0 = CostF(Xbar,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u0,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
     % Primal_dual_gradient_flow
     sigma_values=[];
     while toc<AT
 
         x_pr =Abar*x0+Bbar*hat_u ;
-        errV=V-r;
+        errV=V-Xbar;
         ErrorV=(errV'*Qv*errV);
         norU=ubar-u_des;
         NormU= (norU'*norU);
@@ -410,7 +423,7 @@ for inc=1:n
     Sigmas{inc} = sigma_values;  % Store all Sigma values for the current increment
 
     %Acceptance,Rejection
-    sigma_hat_u = CostF(r,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
+    sigma_hat_u = CostF(Xbar,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
     if sigma_hat_u<=sigma_hat_u0
         hatLambda=hatLambda;
         hat_u=hat_u;

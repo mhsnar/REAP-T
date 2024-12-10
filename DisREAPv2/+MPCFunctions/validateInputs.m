@@ -12,7 +12,7 @@ function validateInputs(A, B, C, D, Qx, Qu, Qv, XConstraintsU, XConstraintsL, UC
     
     % Validate initial conditions and desired state
     assert(size(x0, 1) == size(A, 1) && size(x0, 2) == 1, 'Initial conditions x0 must be a column vector matching A dimensions');
-    assert(size(r, 1) == size(C, 1) && size(r, 2) == 1, 'Desired reference r must be a column vector matching C rows');
+    % assert(size(r, 1) == size(C, 1) && size(r, 2) == 1, 'Desired reference r must be a column vector matching C rows');
     % assert(size(xbar, 1) == size(A, 1) && size(xbar, 2) == 1, 'Desired equilibrium point r must be a column vector matching C rows');
     
     % Validate constraint dimensions
