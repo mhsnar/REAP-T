@@ -1,4 +1,4 @@
-function Omegastar = computeOmegastar(Ad, Bd,Cd,Dd,Xconstraints,Uconstraints,r, NoS,NoI, Qx, Qu)
+function Omegastar = computeOmegastar(Ad, Bd,Cd,Dd,Xconstraints,Uconstraints,xbar, NoS,NoI, Qx, Qu)
 
 
 
@@ -43,7 +43,7 @@ for Omegastar=0:100
     % else
     %     theta=pinv(ssss)*r;
     % end
-    theta=pinv(M1)*r;
+    theta=pinv(M1)*xbar;
     % theta = sdpvar(3,1,'full');
     x=sdpvar(NoS,1,'full');
 

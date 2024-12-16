@@ -8,7 +8,7 @@ u_des=zeros(NoI,1);
 % Initial conditions and reference
 
 x(:, 1) = [x0;zeros(NoI,1)];
-
+r=Cd(:,1:NoS-NoI)*Xbar;
 % Discretized system matrices for augmented system
 Xconstraint_down=Xconstraints(:,1);
 Xconstraint=Xconstraints(:,end);
@@ -175,8 +175,8 @@ for inc=1:n
         V=N*theta;
         x0=x(:,1);
         x_pr =Abar*x0+Bbar*hat_u ;
-        % x_pr =Bbar * hat_u ;
-        errV=V-Xbar;
+
+        errV=V-r;
         ErrorV=(errV'*Qv*errV);
         norU=ubar-u_des;
         NormU= (norU'*norU);
@@ -241,7 +241,7 @@ for inc=1:n
 
     hat_u0=hat_u;
     hatLambda0=hatLambda;
-    sigma_hat_u0 = Functions.CostF(Xbar,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u0,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
+    sigma_hat_u0 = Functions.CostF(r,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u0,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
     % Primal_dual_gradient_flow
     sigma_values=[];
     Num_REAP=0;
@@ -250,7 +250,7 @@ for inc=1:n
 
 
         x_pr =Abar*x0+Bbar*hat_u ;
-        errV=V-Xbar;
+        errV=V-r;
         ErrorV=(errV'*Qv*errV);
         norU=ubar-u_des;
         NormU= (norU'*norU);
@@ -414,7 +414,7 @@ for inc=1:n
     Total_Num_REAP(inc)=Num_REAP;
     Sigmas{inc} = sigma_values;  % Store all Sigma values for the current increment
 
-    sigma_hat_u = Functions.CostF(Xbar,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
+    sigma_hat_u = Functions.CostF(r,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
     %Acceptance,Rejection
     [hat_u,hatLambda] = Functions.ARMechanism(sigma_hat_u,sigma_hat_u0,hat_u0,hat_u,hatLambda0,hatLambda);
     %Warm Starting
