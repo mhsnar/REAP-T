@@ -1,4 +1,4 @@
-function validateInputs(A, B, C, D, Qx, Qu, Qv, XConstraintsU, XConstraintsL, UConstraintsU, UConstraintsL, x0, r, nSim, DeltaT)
+function validateInputs(A, B, C, D, Qx, Qu, Qv, XConstraintsU, XConstraintsL, UConstraintsU, UConstraintsL, x0, r, nSim, DeltaT,ModeDropdown)
     % Validate the input matrices for consistency and constraints
     
     % Validate matrix dimensions
@@ -9,6 +9,21 @@ function validateInputs(A, B, C, D, Qx, Qu, Qv, XConstraintsU, XConstraintsL, UC
     assert(size(Qx, 1) == size(A, 1) && size(Qx, 2) == size(A, 1), 'Matrix Qx dimensions must match with A');
     assert(size(Qu, 1) == size(B, 2) && size(Qu, 2) == size(B, 2), 'Matrix Qu dimensions must match with B');
     assert(size(Qv, 1) == size(C, 1) && size(Qv, 2) == size(C, 1), 'Matrix Qv dimensions must match with C');
+    
+    % Validate Controllability
+    controllability_matrix = ctrb(A, B);
+    if rank(controllability_matrix) < size(A, 1)
+        error('The pair (A,B) is not controllable. REAP-T cannot proceed with the specified system.');
+    else
+        fprintf('System is controllable, ');
+    end
+
+    % Compute the observability matrix for Prediction-based terminal
+    % condition method
+    observability_matrix = obsv(A, C);
+    if rank(observability_matrix) < size(A, 1) && strcmp(ModeDropdown.Value, 'Prediction-Based') 
+        error('The pair (C, A) is not observable. Please use the Lyapunov-based method to implement the terminal constraint set.');
+    end
     
     % Validate initial conditions and desired state
     assert(size(x0, 1) == size(A, 1) && size(x0, 2) == 1, 'Initial conditions x0 must be a column vector matching A dimensions');

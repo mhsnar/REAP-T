@@ -1,4 +1,4 @@
-function [x, u_app,Sigmas,AllConstraints] = computeMPC_Omegastar(Ad, Bd, Cd,Dd,Xconstraints,Uconstraints,x0,Xbar, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizion, Omegastar, n,C)
+function [x, u_app,Sigmas] = computeMPC_Omegastar(Ad, Bd, Cd,Dd,Xconstraints,Uconstraints,x0,Xbar, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizion, Omegastar, n,C)
 % Compute MPC control action
 % Implement the MPC logic here based on the provided code
 disp('REAP has started!...');
@@ -17,12 +17,6 @@ Xconstraint=Xconstraints(:,end);
 
 Uconstraint_down=Uconstraints(:,1);
 Uconstraint=Uconstraints(:,end);
-
-
-AllConstraints.XUB=Xconstraint;
-AllConstraints.XLB=Xconstraint_down;
-AllConstraints.UUB=Uconstraint;
-AllConstraints.ULB=Uconstraint_down;
 
 
 Xconstraint = [Xconstraint;1000* ones(NoI,1)];
@@ -160,6 +154,7 @@ sign=[];
 Sigmas = [];
 Sigmass = [];
 sigma_values=[];
+Total_Num_REAP=zeros(n,1);
 
 for inc=1:n
 
@@ -230,13 +225,8 @@ for inc=1:n
 
         TConstraints=[TXConstraints1;TXConstraints2;TUConstraints1;TUConstraints2]<=0;
         TConstraints = [TConstraints;M2*theta<=0.98*Uconstraint-1/beta;M2*theta>=+0.98*Uconstraint_down+1/beta;M1*theta<=0.98*Xconstraint-1/beta;M1*theta>=0.98*Xconstraint_down+1/beta];
-
         Constraint=[x_pr<=x_up-1/beta;x_pr>=x_down+1/beta;hat_u<=u_up-1/beta;hat_u>=u_down+1/beta];
-        AllConstraints.AllConstraintsX=[x_pr-x_up+1/beta;-x_pr+x_down+1/beta];
-        AllConstraints.AllConstraintsU=[hat_u-u_up+1/beta;-hat_u+u_down+1/beta];
 
-        AllConstraints.NoI=NoI;
-        AllConstraints.NoS=NoS-NoI;
         Constraints=[Constraint;TConstraints];
         opt=sdpsettings('showprogress',0,'verbose',0);
         sol=optimize(Constraints,sigma,opt);
@@ -259,9 +249,10 @@ for inc=1:n
     MM=0;
     hat_u0=hat_u;
     hatLambda0=hatLambda;
-    sigma_hat_u0 = CostF(Xbar,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u0,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
+    sigma_hat_u0 = Functions.CostF(Xbar,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u0,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
     % Primal_dual_gradient_flow
     sigma_values=[];
+    Num_REAP=0;
     while toc<AT
 
         x_pr =Abar*x0+Bbar*hat_u ;
@@ -351,8 +342,8 @@ for inc=1:n
         delTU=min(max([TUConstraints1;TUConstraints2]-1/beta+epsilon),0);
 
         % Compute gradients of the objective function
-        grad_B_u = gradient_B_u(Bbar, errU,errX,errTX, QuBar,QxBar, NoS,hatLambda, Prediction_Horizion,AllConstraints,beta,Qn,BbarTx,BbarTu);
-        grad_B_lambda = gradient_B_lambda( AllConstraints, beta);
+        grad_B_u = Functions.gradient_B_u(Bbar, errU,errX,errTX, QuBar,QxBar, NoS,hatLambda, Prediction_Horizion,AllConstraints,beta,Qn,BbarTx,BbarTu);
+        grad_B_lambda = Functions.gradient_B_lambda( AllConstraints, beta);
 
         [minValue, minIndex] = max([delX, delU, delTX, delTU]);
 
@@ -369,10 +360,14 @@ for inc=1:n
             end
         end
 
-
+        % gammaD
         Sigma=gammaD*dell(minIndex)/(ds*max(norm(grad_B_u),eta));
 
-        Checkpoint=grad_B_lambda+ Phi(hatLambda,grad_B_lambda,hat_lambda);
+        %%%
+        dellMM=min(dell);
+        Sigma=dellMM/(ds*max(norm(grad_B_u),eta));
+        %%%
+        Checkpoint=grad_B_lambda+ Functions.Phi(hatLambda,grad_B_lambda,hat_lambda);
         flag_gammaD=0;
         while flag_gammaD==0
             if any((hat_lambda+ds*Sigma*Checkpoint)<0)
@@ -387,7 +382,7 @@ for inc=1:n
         hat_u= hat_u- ds*Sigma*grad_B_u;
 
 
-        hat_lambda=hat_lambda+ds*Sigma*(grad_B_lambda+ Phi(hatLambda,grad_B_lambda,hat_lambda));
+        hat_lambda=hat_lambda+ds*Sigma*(grad_B_lambda+ Functions.Phi(hatLambda,grad_B_lambda,hat_lambda));
 
 
         hat_lambda_x1=hat_lambda(1: size(XConstraints1));
@@ -418,94 +413,22 @@ for inc=1:n
         % pause(0.005);
         % i=i+1;
         MM=MM+1;
+        Num_REAP=Num_REAP+1;
     end
-
+    Total_Num_REAP(inc)=Num_REAP;
     Sigmas{inc} = sigma_values;  % Store all Sigma values for the current increment
 
+
+    sigma_hat_u = Functions.CostF(Xbar,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
     %Acceptance,Rejection
-    sigma_hat_u = CostF(Xbar,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
-    if sigma_hat_u<=sigma_hat_u0
-        hatLambda=hatLambda;
-        hat_u=hat_u;
-    else
-        hatLambda=hatLambda0;
-        hat_u=hat_u0;
-    end
-    %Warm Starting
-    hat_u_0=[];
-    hat_lambda_x1_0=[];
-    hat_lambda_x2_0=[];
-    hat_lambda_u1_0=[];
-    hat_lambda_u2_0=[];
-    hat_lambda_omega_x1_0=[];
-    hat_lambda_omega_x2_0=[];
-    hat_lambda_omega_u1_0=[];
-    hat_lambda_omega_u2_0=[];
-    hat_lambda_omega_x1_eps_0=[];
-    hat_lambda_omega_x2_eps_0=[];
-    hat_lambda_omega_u1_eps_0=[];
-    hat_lambda_omega_u2_eps_0=[];
-
-    hat_lambda_x1=hatLambda.x1;
-    hat_lambda_x2=hatLambda.x2;
-    hat_lambda_u1=hatLambda.u1;
-    hat_lambda_u2=hatLambda.u2;
-    hat_lambda_omega_x1=hatLambda.omega_x1;
-    hat_lambda_omega_x2=hatLambda.omega_x2;
-    hat_lambda_omega_u1=hatLambda.omega_u1;
-    hat_lambda_omega_u2=hatLambda.omega_u2;
-    hat_lambda_omega_x1_eps=hatLambda.omega_x1_eps;
-    hat_lambda_omega_x2_eps=hatLambda.omega_x2_eps;
-    hat_lambda_omega_u1_eps=hatLambda.omega_u1_eps;
-    hat_lambda_omega_u2_eps=hatLambda.omega_u2_eps;
+    [hat_u,hatLambda] = Functions.ARMechanism(sigma_hat_u,sigma_hat_u0,hat_u0,hat_u,hatLambda0,hatLambda);
 
 
 
+    % %Warm Starting
 
-    for p=1:Prediction_Horizion-1
-        hat_u_0=[hat_u_0;hat_u(NoI*p+1:NoI*p+NoI)];
-        hat_lambda_x1_0=[hat_lambda_x1_0;hat_lambda_x1(NoS*p+1:NoS*p+NoS)];
-        hat_lambda_x2_0=[hat_lambda_x2_0;hat_lambda_x2(NoS*p+1:NoS*p+NoS)];
-        hat_lambda_u1_0=[hat_lambda_u1_0;hat_lambda_u1(NoI*p+1:NoI*p+NoI)];
-        hat_lambda_u2_0=[hat_lambda_u2_0;hat_lambda_u2(NoI*p+1:NoI*p+NoI)];
-    end
-    for p=1:Omegastar-1
-        hat_lambda_omega_x1_0=[hat_lambda_omega_x1_0;hat_lambda_omega_x1(NoS*p+1:NoS*(p+1))];
-        hat_lambda_omega_x2_0=[hat_lambda_omega_x2_0;hat_lambda_omega_x2(NoS*p+1:NoS*(p+1))];
-        hat_lambda_omega_u1_0=[hat_lambda_omega_u1_0;hat_lambda_omega_u1(NoI*p+1:NoI*(p+1))];
-        hat_lambda_omega_u2_0=[hat_lambda_omega_u2_0;hat_lambda_omega_u2(NoI*p+1:NoI*(p+1))];
-
-    end
-    %the same
-
-    hat_lambda_omega_x1_eps_0=hat_lambda_omega_x1_eps;
-    hat_lambda_omega_x2_eps_0=hat_lambda_omega_x2_eps;
-    hat_lambda_omega_u1_eps_0=hat_lambda_omega_u1_eps;
-    hat_lambda_omega_u2_eps_0=hat_lambda_omega_u2_eps;
-
-
-    hat_u_0=[hat_u_0; M2*theta+K*(x_pr(NoS*Prediction_Horizion-NoS+1:NoS*Prediction_Horizion)-M1*theta)];
-    hat_lambda_x1_0=[hat_lambda_x1_0;hat_lambda_x1(NoS*Prediction_Horizion-NoS+1:NoS*Prediction_Horizion)];
-    hat_lambda_x2_0=[hat_lambda_x2_0;hat_lambda_x2(NoS*Prediction_Horizion-NoS+1:NoS*Prediction_Horizion)];
-    hat_lambda_u1_0=[hat_lambda_u1_0;hat_lambda_u1(NoI*Prediction_Horizion-NoI+1:NoI*Prediction_Horizion)];
-    hat_lambda_u2_0=[hat_lambda_u2_0;hat_lambda_u2(NoI*Prediction_Horizion-NoI+1:NoI*Prediction_Horizion)];
-    hat_lambda_omega_x1_0=[hat_lambda_omega_x1_0;hat_lambda_omega_x1(NoS*Omegastar-NoS+1:NoS*Omegastar)];
-    hat_lambda_omega_x2_0=[hat_lambda_omega_x2_0;hat_lambda_omega_x2(NoS*Omegastar-NoS+1:NoS*Omegastar)];
-    hat_lambda_omega_u1_0=[hat_lambda_omega_u1_0;hat_lambda_omega_u1(NoI*Omegastar-NoI+1:NoI*Omegastar)];
-    hat_lambda_omega_u2_0=[hat_lambda_omega_u2_0;hat_lambda_omega_u2(NoI*Omegastar-NoI+1:NoI*Omegastar)];
-    hatLambda.x1=hat_lambda_x1_0;
-    hatLambda.x2=hat_lambda_x2_0;
-    hatLambda.u1=hat_lambda_u1_0;
-    hatLambda.u2=hat_lambda_u2_0;
-    hatLambda.omega_x1=hat_lambda_omega_x1_0;
-    hatLambda.omega_x2=hat_lambda_omega_x2_0;
-    hatLambda.omega_u1=hat_lambda_omega_u1_0;
-    hatLambda.omega_u2=hat_lambda_omega_u2_0;
-    hatLambda.omega_x1_eps=hat_lambda_omega_x1_eps_0;
-    hatLambda.omega_x2_eps=hat_lambda_omega_x2_eps_0;
-    hatLambda.omega_u1_eps=hat_lambda_omega_u1_eps_0;
-    hatLambda.omega_u2_eps=hat_lambda_omega_u2_eps_0;
-
+    [hatLambda,hat_u_0] = Functions.Warmstarting(hatLambda,hat_u,NoS,NoI,Prediction_Horizion,M1,M2,x_pr,Omegastar,theta,K);
+    
 
     u_app(:,inc)=double(hat_u(1:NoI));
     x(:,inc+1)=Ad*x(:,inc)+Bd*u_app(:,inc);
@@ -517,135 +440,7 @@ end
 
 
 
-    function grad_B_u = gradient_B_u(Bbar, errU,errX,errTX, QuBar,QxBar, NoS,hatLambda, Prediction_Horizion,AllConstraints,beta,Qn,BbarTx,BbarTu)
-        XConstraints1=AllConstraints.x1;
-        XConstraints2=AllConstraints.x2;
-        UConstraints1=AllConstraints.u1;
-        UConstraints2=AllConstraints.u2;
-        TXConstraints1=AllConstraints.Tx1;
-        TXConstraints2=AllConstraints.Tx2;
-        TUConstraints1=AllConstraints.Tu1;
-        TUConstraints2=AllConstraints.Tu2;
-        Ax1=AllConstraints.Ax1;
-        Ax2=AllConstraints.Ax2;
-        Cu1=AllConstraints.Cu1;
-        Cu2=AllConstraints.Cu2;
+   
 
-        hat_lambda_x1=hatLambda.x1;
-        hat_lambda_x2=hatLambda.x2;
-        hat_lambda_u1=hatLambda.u1;
-        hat_lambda_u2=hatLambda.u2;
-        hat_lambda_omega_x1=hatLambda.omega_x1;
-        hat_lambda_omega_x2=hatLambda.omega_x2;
-        hat_lambda_omega_u1=hatLambda.omega_u1;
-        hat_lambda_omega_u2=hatLambda.omega_u2;
-        hat_lambda_omega_x1_eps=hatLambda.omega_x1_eps;
-        hat_lambda_omega_x2_eps=hatLambda.omega_x2_eps;
-        hat_lambda_omega_u1_eps=hatLambda.omega_u1_eps;
-        hat_lambda_omega_u2_eps=hatLambda.omega_u2_eps;
-
-
-        % Gradient with respect to u
-        grad_B_u = 2 * QuBar * errU  + 2 * Bbar' *QxBar * errX +2 * Bbar(NoS * Prediction_Horizion - (NoS-1):NoS * Prediction_Horizion,:)' *Qn * errTX;
-        grad_B_u = grad_B_u...
-            - Bbar'*(hat_lambda_x1 .* (-beta) .*Ax1 ./ (-beta * XConstraints1+ 1))...
-            - Bbar'*(hat_lambda_x2 .* (-beta) .*Ax2 ./ (-beta * XConstraints2 + 1))...
-            - hat_lambda_u1 .* (-beta) .* Cu1 ./ (-beta * UConstraints1 + 1)...
-            - hat_lambda_u2 .* (-beta) .* Cu2 ./ (-beta * UConstraints2 + 1)...
-            - (BbarTx')*(hat_lambda_omega_x1 .* (-beta)  ./ (-beta * TXConstraints1+ 1))...
-            - (-BbarTx')*(hat_lambda_omega_x2 .* (-beta)  ./ (-beta * TXConstraints2+ 1))...
-            - (BbarTu')*(hat_lambda_omega_u1 .* (-beta)  ./ (-beta * TUConstraints1+ 1))...
-            - (-BbarTu')*(hat_lambda_omega_u2 .* (-beta)  ./ (-beta * TUConstraints2+ 1));
-
-        % TXConstraints1 = M1*theta-0.98*Xconstraint+1/beta;
-        % TXConstraints2 = -M1*theta-0.98*Xconstraint+1/beta;
-        % TUConstraints1 = M2*theta-0.98*Uconstraint+1/beta;
-        % TUConstraints2 =- M2*theta-0.98*Uconstraint+1/beta;
-    end
-
-    function grad_B_lambda = gradient_B_lambda( AllConstraints, beta)
-        XConstraints1=AllConstraints.x1;
-        XConstraints2=AllConstraints.x2;
-        UConstraints1=AllConstraints.u1;
-        UConstraints2=AllConstraints.u2;
-        TXConstraints1=AllConstraints.Tx1;
-        TXConstraints2=AllConstraints.Tx2;
-        TUConstraints1=AllConstraints.Tu1;
-        TUConstraints2=AllConstraints.Tu2;
-
-        TXConstraints1_eps=AllConstraints.Tx1_eps;
-        TXConstraints2_eps=AllConstraints.Tx2_eps;
-        TUConstraints1_eps=AllConstraints.Tu1_eps;
-        TUConstraints2_eps=AllConstraints.Tu2_eps;
-
-
-
-
-
-
-        grad_B_lambda =  [-log10(-beta * XConstraints1 + 1);-log10(-beta * XConstraints2 + 1);...
-            -log10(-beta * UConstraints1 + 1); -log10(-beta * UConstraints2 + 1);...
-            -log10(-beta * TXConstraints1 + 1);-log10(-beta * TXConstraints2 + 1);...
-            -log10(-beta * TUConstraints1 + 1); -log10(-beta * TUConstraints2 + 1);...
-            -log10(-beta * TXConstraints1_eps + 1);-log10(-beta * TXConstraints2_eps + 1);...
-            -log10(-beta * TUConstraints1_eps + 1); -log10(-beta * TUConstraints2_eps + 1)];
-
-
-        % grad_B_lambda(XConstraints1 > 1/beta) = -100;
-
-    end
-%% Calculate Phi
-    function phi = Phi(hatLambda,grad_B_lambda,hat_lambda)
-        hat_lambda_x1=hatLambda.x1;
-        hat_lambda_x2=hatLambda.x2;
-        hat_lambda_u1=hatLambda.u1;
-        hat_lambda_u2=hatLambda.u2;
-        hat_lambda_omega_x1=hatLambda.omega_x1;
-        hat_lambda_omega_x2=hatLambda.omega_x2;
-        hat_lambda_omega_u1=hatLambda.omega_u1;
-        hat_lambda_omega_u2=hatLambda.omega_u2;
-        hat_lambda_omega_x1_eps=hatLambda.omega_x1_eps;
-        hat_lambda_omega_x2_eps=hatLambda.omega_x2_eps;
-        hat_lambda_omega_u1_eps=hatLambda.omega_u1_eps;
-        hat_lambda_omega_u2_eps=hatLambda.omega_u2_eps;
-        % Adjust gradients based on conditions for Phi(s)
-        lambda = [hat_lambda_x1;hat_lambda_x2;hat_lambda_u1;hat_lambda_u2...
-            ;hat_lambda_omega_x1;hat_lambda_omega_x2;hat_lambda_omega_u1;hat_lambda_omega_u2;hat_lambda_omega_x1_eps;hat_lambda_omega_x2_eps;hat_lambda_omega_u1_eps;hat_lambda_omega_u2_eps] ;
-
-        for k=1:length(hat_lambda)
-            if lambda(k) > 0  || (lambda(k)== 0  && grad_B_lambda(k)>= 0)
-                phi(k) = 0; % Set to zero based on conditions
-            else
-
-                phi(k) = -grad_B_lambda(k);
-            end
-        end
-
-        phi=phi';
-    end
-
-    function sigma = CostF(r,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta)
-
-        xbar=M1*theta;
-        ubar=M2*theta;
-        V=N*theta;
-        % if inc==1
-        %     x0=x(:,1);
-        % elseif inc>1
-        %     x0=[x(1,inc);(x(1,inc)-x(1,inc-1))/DeltaT;x(3,inc);(x(3,inc)-x(3,inc-1))/DeltaT;x(5,inc);(x(5,inc)-x(5,inc-1))/DeltaT;u_app(:,inc-1)];
-        % end
-        x_pr =Abar*x0+Bbar*hat_u ;
-        errV=V-r;
-        ErrorV=(errV'*Qv*errV);
-        norU=ubar-u_des;
-        NormU= (norU'*norU);
-        errU = hat_u - M2Bar*theta;
-        ErrorU = errU' * QuBar * errU;
-        errX = x_pr - M1Bar*theta;
-        ErrorX = errX' * QxBar * errX;
-        errTX = x_pr(NoS * Prediction_Horizion - (NoS-1):NoS * Prediction_Horizion) - xbar;
-        ErrorTX = errTX' * Qn * errTX;
-        sigma = ErrorV+ErrorU + ErrorX + ErrorTX + NormU;
-    end
-
+    
 end

@@ -7,7 +7,7 @@ ULB=AllConstraints.ULB;
 NoI=AllConstraints.NoI;
 NoS=AllConstraints.NoS;
 
-disp('State Constraints in readable format:');
+disp('State Constraints:');
 for i = 1:NoS
 
     % Display the constraint
@@ -20,7 +20,7 @@ for i =1:NoS
 end
 
 % Display general constraints
-disp('Input Constraints in readable format:');
+disp('Input Constraints:');
 for i = 1:NoI
 
     % Display the constraint
