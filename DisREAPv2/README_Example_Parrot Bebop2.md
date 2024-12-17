@@ -4,7 +4,7 @@
 
 ## Model Structure
 
-We propose the following structure to describe the position dynamics of a quadcopter:
+We propose the following structure to describe the position dynamics of the Barrot Bebop2:
 
 $$
 \begin{aligned}
