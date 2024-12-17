@@ -36,7 +36,6 @@ $$
 0 & 0 & 0 \\
 0 & 0 & \beta_z
 \end{bmatrix} u,\\
-
 y &=
 \begin{bmatrix}
 1 & 0 & 0 & 0 & 0 & 0 \\
