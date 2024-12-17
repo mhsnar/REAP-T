@@ -50,5 +50,5 @@ where $x=\begin{bmatrix}p_x & \dot{p}_x & p_y & \dot{p}_y & p_z & \dot{p}_z \end
 Note that the model is consistent with practical observations:
 
 1. Dynamics along X, Y, and Z directions are decoupled, as one can control the position of the quadcopter along X, Y, and Z directions separately.
-2. When $\dot{p}_x \neq 0$ ($\dot{p}_y \neq 0$ and $\dot{p}_z \neq 0$) and $u_x = 0$ ($u_y = 0$, $u_z = 0$), the quadcopter continues moving in the respective direction while its velocity decreases to zero. This observation suggests that $\alpha_x, \alpha_y, \alpha_z \in \mathbb{R}_{>0}$.
+2. When $\dot{p}_x \neq 0$ ($\dot{p}_y \neq 0$ and $\dot{p}_z \neq 0$) and $u_x = 0$ ($u_y = 0$, $u_z = 0$), the quadcopter continues moving in the respective direction while its velocity decreases to zero. This observation suggests that $\alpha_x,\alpha_y,\alpha_z\in\mathbb{R}_{>0}$.
 3. When pitch and roll angles are small, the quadcopter behaves as a second-order system.
