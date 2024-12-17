@@ -17,35 +17,27 @@ We use the **Parrot Drone Support from MATLAB** to send control commands to the 
 
 The dynamical model can be expressed via the following state-space equations:
 
-$$
-\begin{aligned}
-\dot{x} &=
-\begin{bmatrix}
-0 & 1 & 0 & 0 & 0 & 0 \\
-0 & -\alpha_x & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 1 & 0 & 0 \\
-0 & 0 & 0 & -\alpha_y & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 1 \\
-0 & 0 & 0 & 0 & 0 & -\alpha_z
-\end{bmatrix} x +
-\begin{bmatrix}
-0 & 0 & 0 \\
-\beta_x & 0 & 0 \\
-0 & 0 & 0 \\
-0 & \beta_y & 0 \\
-0 & 0 & 0 \\
-0 & 0 & \beta_z
-\end{bmatrix} u,\\
-y &=
-\begin{bmatrix}
-1 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 1 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 1 & 0
-\end{bmatrix} x,
-\end{aligned}
-$$
+linear dynamics in the form of \eqref{eq:SystemContinous} with the following matrices (this system has been discussed in \citep{amiri2024closed}):  
+\begin{align*}\label{eq:ParrotDynamcis}  
+A_c &= \begin{bmatrix}  
+0 & 1.0000 & 0 & 0 & 0 & 0 \\  
+0 & -0.0527 & 0 & 0 & 0 & 0 \\  
+0 & 0 & 0 & 1.0000 & 0 & 0 \\  
+0 & 0 & 0 & -0.0187 & 0 & 0 \\  
+0 & 0 & 0 & 0 & 0 & 1.0000 \\  
+0 & 0 & 0 & 0 & 0 & -1.7873  
+\end{bmatrix}, \\  
+B_c &= \begin{bmatrix}  
+0 & 0 & 0 \\  
+-5.4779 & 0 & 0 \\  
+0 & 0 & 0 \\  
+0 & -7.0608 & 0 \\  
+0 & 0 & 0 \\  
+0 & 0 & -1.7382  
+\end{bmatrix},C_c= I_6
+\end{align*}  
 
-where $x=\begin{bmatrix}p_x & \dot{p}_x & p_y & \dot{p}_y & p_z & \dot{p}_z \end{bmatrix}^\top$ and $u = \begin{bmatrix} u_x & u_y & u_z \end{bmatrix}^\top$.
+where $x=\begin{bmatrix} p_x & \dot{p}_x & p_y & \dot{p}_y & p_z & \dot{p}_z \end{bmatrix}^\top$ and $u = \begin{bmatrix} u_x & u_y & u_z \end{bmatrix}^\top$.
 
 Note that the model is consistent with practical observations:
 
