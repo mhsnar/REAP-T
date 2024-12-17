@@ -50,7 +50,7 @@ B_c =
 \end{bmatrix}, C_c = I_6
 
 
-The first example involves a Parrot Bebop 2 drone, whose continuous-time dynamical model is described in [Amiri et al., 2024](#amiri2024closed). The system includes six states and three control inputs, with the following constraints:
+The system includes six states and three control inputs, with the following constraints:
 
 - **State constraints**:  
   - Upper bound: \( X.U.B = [10, 10, 2.57, 10, 10, 10]^\top \)  
