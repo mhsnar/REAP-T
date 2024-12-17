@@ -23,9 +23,6 @@ With $p_x,p_y,p_z \in \mathbb{R}$ are X, Y, and Z positions of the quadcopter in
 
 See Figure [Parrot](#parrot).
 
----
-
-### State-Space Representation
 
 The dynamical model can be expressed in state-space form with the following matrices:
 
@@ -48,3 +45,4 @@ B_c =
 0 & 0 & 0 \\
 0 & 0 & -1.7382
 \end{bmatrix}, C_c = I_6
+
