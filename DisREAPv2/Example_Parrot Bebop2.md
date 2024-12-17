@@ -60,17 +60,17 @@ $$
   - Upper bound: $U.U.B = [0.05, 0.05, 0.6]^\top$ 
   - Lower bound: $U.L.B = [-0.05, -0.05, -0.6]^\top$  
 
-- **Sampling period**: \( \Delta T = 0.2 \)
+- **Sampling period**: $\Delta T = 0.2$
 
 - **Weighting matrices**:  
-  - \( Q_x = \text{diag}\{5 \times I_4, 1000 \times I_2\} \)  
-  - \( Q_u = \text{diag}\{35, 20, 1\} \)
+  - $Q_x = \text{diag}\{5 \times I_4, 1000 \times I_2\}$  
+  - $Q_u = \text{diag}\{35, 20, 1\}$
 
-- **Initial state**: \( x_0 = [-0.48, 0, 0.46, 0, 1.08, 0]^\top \)  
-- **Reference state**: \( \bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top \)
+- **Initial state**: $x_0 = [-0.48, 0, 0.46, 0, 1.08, 0]^\top$  
+- **Reference state**: $\bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top$
 
 
-The system is discretized with a sampling period of \( \Delta T = 0.2 \), and the weighting matrices are defined as:  
+The system is discretized with a sampling period of $\Delta T = 0.2$, and the weighting matrices are defined as:  
 - $Q_x = [5 0 0 0 0 0
             0 5 0 0 0 0
            0 0 5 0 0 0
@@ -79,5 +79,5 @@ The system is discretized with a sampling period of \( \Delta T = 0.2 \), and th
            0 0 0 0 0 1000]$  
 - $ Q_u = \text{diag}\{35, 20, 1\}$
 
-**Results**: Fig. 1 presents the results with the initial condition \( x(0) = [-0.48, 0, 0.46, 0, 1.08, 0]^\top \) and the reference equilibrium point \( \bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top \).
+**Results**: Fig. 1 presents the results with the initial condition $x(0) = [-0.48, 0, 0.46, 0, 1.08, 0]^\top$ and the reference equilibrium point $\bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top$.
 
