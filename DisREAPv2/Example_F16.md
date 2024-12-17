@@ -9,9 +9,6 @@ We propose the following structure to describe the position dynamics of a quadco
 $$
 \begin{aligned}
 A_c x+B_c u\\
-\ddot{p}_x + \alpha_x \dot{p}_x &= \beta_x u_x,\\
-\ddot{p}_y + \alpha_y \dot{p}_y &= \beta_y u_y,\\
-\ddot{p}_z + \alpha_z \dot{p}_z &= \beta_z u_z,
 \end{aligned}
 $$
 
