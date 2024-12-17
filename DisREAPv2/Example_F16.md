@@ -3,13 +3,13 @@
 ## Model Structure
 Suppose that the yaw angle of the quadcopter is very small; see Subsection [Identification Procedure](#sec:IdentificationProcedure) for details on how one can regulate the yaw angle to zero. Taking inspiration from [Pinto et al., 2020](#), [Santos, 2019](#), we propose the following structure to describe the position dynamics of a quadcopter:
 
-\[
+$$
 \begin{aligned}
 \ddot{p}_x + \alpha_x \dot{p}_x &= \beta_x u_x,\\
 \ddot{p}_y + \alpha_y \dot{p}_y &= \beta_y u_y,\\
 \ddot{p}_z + \alpha_z \dot{p}_z &= \beta_z u_z,
 \end{aligned}
-\]
+$$
 
 where \( p_x, p_y, p_z \in \mathbb{R} \) are X, Y, and Z positions of the quadcopter in the global Cartesian coordinate system, \( \alpha_x, \alpha_y, \alpha_z, \beta_x, \beta_y, \beta_z \in \mathbb{R} \) are system parameters, and \( u_x, u_y, u_z \in \mathbb{R} \) are control inputs on X, Y, and Z directions.
 
