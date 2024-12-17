@@ -71,39 +71,6 @@ The system is discretized with a sampling period of \( \Delta T = 0.2 \), and th
 
 **Results**: Fig. 1 presents the results with the initial condition \( x(0) = [-0.48, 0, 0.46, 0, 1.08, 0]^\top \) and the reference equilibrium point \( \bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top \).
 
----
-
-## System Dynamics
-
-The linear dynamics are described in the form of Eq. (1) with the following matrices (this system has been discussed in [Amiri et al., 2024](#amiri2024closed)):
-
-### Continuous-Time System Matrices
-
-\[
-A_c =
-\begin{bmatrix}
-0 & 1.0000 & 0 & 0 & 0 & 0 \\
-0 & -0.0527 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 1.0000 & 0 & 0 \\
-0 & 0 & 0 & -0.0187 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 1.0000 \\
-0 & 0 & 0 & 0 & 0 & -1.7873
-\end{bmatrix},
-\quad
-B_c =
-\begin{bmatrix}
-0 & 0 & 0 \\
--5.4779 & 0 & 0 \\
-0 & 0 & 0 \\
-0 & -7.0608 & 0 \\
-0 & 0 & 0 \\
-0 & 0 & -1.7382
-\end{bmatrix},
-\quad
-C_c = I_6
-\]
-
----
 
 ## Constraints and Parameters
 
