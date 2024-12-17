@@ -43,6 +43,17 @@ In this example, with a sampling period of $\Delta T = 0.1$ seconds (100 millise
 - State weighting matrix:  
   $Q_x = \text{diag}\{0.1, 0.1, 10, 10\}$
 
+$$
+\begin{gathered}
+Q_x=\left[\begin{array}{cccc}
+0.1 & 0 & 0 & 0 \\
+0 & 0.1 & 0 & 0 \\
+0 & 0 & 10 & 0 \\
+0 & 0 & 0 & 10 
+\end{array}\right]^{\top} .
+\end{gathered}
+$$
+
 - Control input weighting matrix:  
   $Q_u = \text{diag}\{0.1, 0.1\}$
 
