@@ -12,7 +12,9 @@ $$
 \end{aligned}
 $$
 
-where $x=\begin{bmatrix}p_x & \dot{p}_x & p_y & \dot{p}_y & p_z & \dot{p}_z \end{bmatrix}^\top$ and $u=\begin{bmatrix}u_x& u_y& u_z \end{bmatrix}^\top$. 
+where $x=\begin{bmatrix}p_x & \dot{p}_x & p_y & \dot{p}_y & p_z & \dot{p}_z \end{bmatrix}^\top$
+
+and $u=\begin{bmatrix}u_x& u_y& u_z \end{bmatrix}^\top$. 
 
 where $p_x,p_y,p_z \in \mathbb{R}$ are X, Y, and Z positions of the quadcopter in the global Cartesian coordinate system, \( \alpha_x, \alpha_y, \alpha_z, \beta_x, \beta_y, \beta_z \in \mathbb{R} \) are system parameters, and \( u_x, u_y, u_z \in \mathbb{R} \) are control inputs on X, Y, and Z directions.
 
