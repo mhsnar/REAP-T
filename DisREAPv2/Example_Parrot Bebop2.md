@@ -29,7 +29,7 @@ See Figure [Parrot](#parrot).
 
 The dynamical model can be expressed in state-space form with the following matrices:
 
-math
+$$
 A_c = 
 \begin{bmatrix}
 0 & 1.0000 & 0 & 0 & 0 & 0 \\
@@ -48,7 +48,7 @@ B_c =
 0 & 0 & 0 \\
 0 & 0 & -1.7382
 \end{bmatrix}, C_c = I_6
-
+$$
 
 The system includes six states and three control inputs, with the following constraints:
 
