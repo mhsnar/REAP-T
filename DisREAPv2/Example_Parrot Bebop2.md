@@ -107,13 +107,13 @@ C_c = I_6
 
 ## Constraints and Parameters
 
-- **State constraints**:  
-  - Upper bound: \( X.U.B = [10, 10, 2.57, 10, 10, 10]^\top \)  
-  - Lower bound: \( X.L.B = [-10, -10, -10, -10, 0, -10]^\top \)  
+- *State constraints**:  
+  - Upper bound: $X.U.B = [10, 10, 2.57, 10, 10, 10]^\top$  
+  - Lower bound: $X.L.B = [-10, -10, -10, -10, 0, -10]^\top$  
 
 - **Control input constraints**:  
-  - Upper bound: \( U.U.B = [0.05, 0.05, 0.6]^\top \)  
-  - Lower bound: \( U.L.B = [-0.05, -0.05, -0.6]^\top \)  
+  - Upper bound: $U.U.B = [0.05, 0.05, 0.6]^\top$ 
+  - Lower bound: $U.L.B = [-0.05, -0.05, -0.6]^\top$  
 
 - **Sampling period**: \( \Delta T = 0.2 \)
 
