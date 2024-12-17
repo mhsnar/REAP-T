@@ -29,7 +29,7 @@ See Figure [Parrot](#parrot).
 
 The dynamical model can be expressed in state-space form with the following matrices:
 
-```math
+math
 A_c = 
 \begin{bmatrix}
 0 & 1.0000 & 0 & 0 & 0 & 0 \\
