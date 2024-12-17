@@ -1,10 +1,10 @@
-## Parrot Bebop2 Model
+## Parrot Bebop 2 Model
 
 <img src="Pics/Drone.png" alt="Welcome Image" style="width:25%;">
 
 ## Model Structure
 
-We propose the following structure to describe the position dynamics of the Parrot Bebop2:
+We propose the following structure to describe the position dynamics of the Parrot Bebop 2:
 
 $$
 \begin{aligned}
