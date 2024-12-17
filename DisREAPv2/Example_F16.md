@@ -11,7 +11,7 @@ $$
 \end{aligned}
 $$
 
-where \( p_x, p_y, p_z \in \mathbb{R} \) are X, Y, and Z positions of the quadcopter in the global Cartesian coordinate system, \( \alpha_x, \alpha_y, \alpha_z, \beta_x, \beta_y, \beta_z \in \mathbb{R} \) are system parameters, and \( u_x, u_y, u_z \in \mathbb{R} \) are control inputs on X, Y, and Z directions.
+where $ p_x, p_y, p_z \in \mathbb{R} $ are X, Y, and Z positions of the quadcopter in the global Cartesian coordinate system, \( \alpha_x, \alpha_y, \alpha_z, \beta_x, \beta_y, \beta_z \in \mathbb{R} \) are system parameters, and \( u_x, u_y, u_z \in \mathbb{R} \) are control inputs on X, Y, and Z directions.
 
 We use the **Parrot Drone Support from MATLAB** to send control commands to the Parrot Bebop 2 drone. In this framework, \( u_x \) is the pitch angle (in [rad]), \( u_y \) is the roll angle (in [rad]), and \( u_z \) is the vertical velocity (in [m/s]); see Fig. [Parrot](#fig:Parrot).
 
