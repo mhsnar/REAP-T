@@ -83,5 +83,3 @@ Q_x =
 \end{bmatrix},
 $$
 
-**Results**: Fig. 1 presents the results with the initial condition $x(0)=[-0.48, 0, 0.46, 0, 1.08, 0]^\top$ and the reference equilibrium point $\bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top$.
-
