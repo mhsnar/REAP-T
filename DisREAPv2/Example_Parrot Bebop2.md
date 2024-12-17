@@ -71,6 +71,7 @@ $$
 
 
 The system is discretized with a sampling period of $\Delta T = 0.2$, and the weighting matrices are defined as:  
+
 $$
 Q_x = 
 \begin{bmatrix}
