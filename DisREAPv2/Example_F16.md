@@ -8,7 +8,7 @@ We propose the following structure to describe the position dynamics of a quadco
 
 $$
 \begin{aligned}
-A_c x+B_c u\\
+\dot{x}=A_c x+B_c u\\
 \end{aligned}
 $$
 
