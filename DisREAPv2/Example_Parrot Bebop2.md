@@ -1,7 +1,7 @@
 ## Example: Parrot Bebop 2 Drone
 # Barrot Bebop2 Model
 
-<img src="Pics/Drone.png" alt="Welcome Image" style="width:75%;">
+<img src="Pics/Drone.png" alt="Welcome Image" style="width:25%;">
 
 ## Model Structure
 
