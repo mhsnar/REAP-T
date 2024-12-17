@@ -45,7 +45,7 @@ y &=
 \end{aligned}
 $$
 
-where $x = \begin{bmatrix} p_x & \dot{p}_x & p_y & \dot{p}_y & p_z & \dot{p}_z \end{bmatrix}^\top$ and $u = \begin{bmatrix} u_x & u_y & u_z \end{bmatrix}^\top$.
+where $x=\begin{bmatrix}p_x & \dot{p}_x & p_y & \dot{p}_y & p_z & \dot{p}_z \end{bmatrix}^\top$ and $u = \begin{bmatrix} u_x & u_y & u_z \end{bmatrix}^\top$.
 
 Note that the model is consistent with practical observations:
 
