@@ -1,4 +1,4 @@
-# Quadcopter Model
+# Barrot Bebop2 Model
 
 ![Parrot Drone](Drone%20(1).eps)
 
