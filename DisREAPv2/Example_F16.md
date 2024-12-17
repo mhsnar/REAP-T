@@ -31,7 +31,7 @@ $$
 The state constraints are given by:
 
 - Upper Bound for State: $X.U.B. = [\infty, \infty, 5, 2]^\top$
-- Lower Bound for State: $X.L.B. = -[\infty, \infty, 5, 2]^\top$
+- Lower Bound for State: $X.L.B. = [-\infty, -\infty, -5, -2]^\top$
 
 The control input constraints are:
 
