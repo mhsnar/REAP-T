@@ -12,7 +12,7 @@ $$
 \end{aligned}
 $$
 
-where $x=\begin{bmatrix}p_x & \dot{p}_x & p_y & \dot{p}_y & p_z & \dot{p}_z \end{bmatrix}^\top$
+where $x=[p_x ~ \dot{p}_x ~ p_y ~ \dot{p}_y ~ p_z ~\dot{p}_z ]^\top$
 
 and $u=[u_x\\ 
         u_y\\
