@@ -63,14 +63,6 @@ $$
 - **Sampling period**: $\Delta T = 0.2$
 
 - **Weighting matrices**:  
-  - $Q_x = \text{diag}\{5 \times I_4, 1000 \times I_2\}$  
-  - $Q_u = \text{diag}\{35, 20, 1\}$
-
-- **Initial state**: $x_0 = [-0.48, 0, 0.46, 0, 1.08, 0]^\top$  
-- **Reference state**: $\bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top$
-
-
-The system is discretized with a sampling period of $\Delta T = 0.2$, and the weighting matrices are defined as:  
 
 $$
 Q_x = 
@@ -89,4 +81,11 @@ Q_u =
 0 & 0 & 2
 \end{bmatrix}, 
 $$
+
+- **Initial state**: $x_0 = [-0.48, 0, 0.46, 0, 1.08, 0]^\top$  
+- **Reference state**: $\bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top$
+
+
+The system is discretized with a sampling period of $\Delta T = 0.2$, and the weighting matrices are defined as:  
+
 
