@@ -41,7 +41,7 @@ These constraints apply for all time steps $t$.
 In this example, with a sampling period of $\Delta T = 0.1$ seconds (100 milliseconds), the following parameters are used:
 
 - State weighting matrix:  
-  $Q_x = \text{diag}\{0.1, 0.1, 10, 10\}$
+
 
 $$
 \begin{gathered}
@@ -56,7 +56,7 @@ $$
 
 - Control input weighting matrix:  
 
-  $$
+$$
 \begin{gathered}
 Q_u=\left[\begin{array}{cc}
 0.1 & 0 \\
