@@ -1,6 +1,6 @@
 # F-16 Aircraft Model
 
-<img src="Pics/F16.png" alt="Welcome Image" style="width:75%;">
+<img src="Pics/F16.png" alt="Welcome Image" style="width:55%;">
 
 ## Model Structure
 
@@ -22,3 +22,28 @@ B_c=\left[\begin{array}{cccc}
 \end{gathered}
 $$
 
+## State and Control Input Constraints
+
+The state constraints are given by:
+
+- Upper Bound for State: \( X.U.B. = [\infty, \infty, 5, 2]^\top \)
+- Lower Bound for State: \( X.L.B. = -[\infty, \infty, 5, 2]^\top \)
+
+The control input constraints are:
+
+- Upper Bound for Control Input: \( U.U.B = [10, 15]^\top \)
+- Lower Bound for Control Input: \( U.L.B. = [-10, -15]^\top \)
+
+These constraints apply for all time steps \( t \).
+
+## MPC Parameters
+
+In this example, with a sampling period of \( \Delta T = 0.1 \) seconds (100 milliseconds), the following parameters are used:
+
+- State weighting matrix:  
+  \( Q_x = \text{diag}\{0.1, 0.1, 10, 10\} \)
+
+- Control input weighting matrix:  
+  \( Q_u = \text{diag}\{0.1, 0.1\} \)
+
+- Desired state vector \( r = [4.9, 1.9]^\top \)
