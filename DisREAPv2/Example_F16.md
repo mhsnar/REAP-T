@@ -22,7 +22,7 @@ B_c=\left[\begin{array}{cccc}
 A_c=\left[\begin{array}{cccc}
 0 & 0 & 1 & 0 \\
 0 & 0 & 0 & 1 
-\end{array}\right]\\.
+\end{array}\right].
 \end{gathered}
 $$
 
