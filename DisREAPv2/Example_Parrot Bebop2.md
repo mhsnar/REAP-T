@@ -80,8 +80,8 @@ Q_x =
   0 & 5 & 0 & 0 & 0 & 0\\
   0 & 0 & 5 & 0 & 0 & 0\\
   0 & 0 & 0 & 5 & 0 & 0\\
-  0 0 0 0 1000 0\\
-           0 0 0 0 0 1000]\\
+  0 & 0 & 0 & 0 & 1000 & 0\\
+  0 & 0 & 0 & 0 & 0 & 1000]\\
 \end{bmatrix},
 Q_u =
 \begin{bmatrix}
@@ -90,5 +90,5 @@ Q_u =
 0 & 0 & 2 \\
 \end{bmatrix}, 
 $$
-**Results**: Fig. 1 presents the results with the initial condition $x(0) = [-0.48, 0, 0.46, 0, 1.08, 0]^\top$ and the reference equilibrium point $\bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top$.
+**Results**: Fig. 1 presents the results with the initial condition $x(0)=[-0.48, 0, 0.46, 0, 1.08, 0]^\top$ and the reference equilibrium point $\bar{x}_r = [0, 0, 0, 0, 1.5, 0]^\top$.
 
