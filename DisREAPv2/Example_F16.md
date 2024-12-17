@@ -1,7 +1,7 @@
 ![Parrot Drone](Drone%20(1).eps)
 
 ## Model Structure
-Suppose that the yaw angle of the quadcopter is very small; see Subsection [Identification Procedure](#sec:IdentificationProcedure) for details on how one can regulate the yaw angle to zero. Taking inspiration from [Pinto et al., 2020](#), [Santos, 2019](#), we propose the following structure to describe the position dynamics of a quadcopter:
+Suppose that the yaw angle of the quadcopter is very small; see Subsection [Identification Procedure](#sec: IdentificationProcedure) for details on how one can regulate the yaw angle to zero. Taking inspiration from [Pinto et al., 2020](#), [Santos, 2019](#), we propose the following structure to describe the position dynamics of a quadcopter:
 
 $$
 \begin{aligned}
