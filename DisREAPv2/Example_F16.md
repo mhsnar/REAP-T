@@ -18,7 +18,13 @@ A_c=\left[\begin{array}{cccc}
 B_c=\left[\begin{array}{cccc}
 14.65 & 0.2179 & -0.0054 & 0 \\
 6.538 & -3.087 & 0.0516 & 0
-\end{array}\right]^{\top} .
+\end{array}\right]^{\top}
+A_c=\left[\begin{array}{cccc}
+-3.598 & 0.1968 & -35.180 & 0 \\
+-0.0377 & -0.3579 & 5.884 & 0 \\
+0.0688 & -0.9957 & -0.2163 & 0.0733 \\
+0.9947 & 0.1027 & 0 & 0
+\end{array}\right]\\.
 \end{gathered}
 $$
 
