@@ -19,7 +19,7 @@ B_c=\left[\begin{array}{cccc}
 14.65 & 0.2179 & -0.0054 & 0 \\
 6.538 & -3.087 & 0.0516 & 0
 \end{array}\right]^{\top}
-A_c=\left[\begin{array}{cccc}
+C_c=\left[\begin{array}{cccc}
 0 & 0 & 1 & 0 \\
 0 & 0 & 0 & 1 
 \end{array}\right].
