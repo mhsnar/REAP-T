@@ -1,6 +1,6 @@
 # Barrot Bebop2 Model
 
-<img src="Pics/F16.eps" alt="Welcome Image" style="width:75%;">
+<img src="Pics/F16.png" alt="Welcome Image" style="width:75%;">
 
 ## Model Structure
 
