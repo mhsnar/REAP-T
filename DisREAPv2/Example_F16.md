@@ -55,6 +55,14 @@ Q_x=\left[\begin{array}{cccc}
 $$
 
 - Control input weighting matrix:  
-  $Q_u = \text{diag}\{0.1, 0.1\}$
+
+  $$
+\begin{gathered}
+Q_u=\left[\begin{array}{cccc}
+0.1 & 0 \\
+0 & 0.1 
+\end{array}\right]^{\top} .
+\end{gathered}
+$$
 
 - Desired state vector $r = [4.9, 1.9]^\top$
