@@ -1,4 +1,5 @@
 # Barrot Bebop2 Model
+<img src="Pics/Drone.eps" alt="Welcome Image" style="width:75%;">
 
 ![Parrot Drone](Drone%20(1).eps)
 
