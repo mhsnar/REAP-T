@@ -18,7 +18,7 @@ and $u=[u_x\\
         u_y\\
         u_z]^\top$. 
 
-With $p_x,p_y,p_z \in \mathbb{R}$ are $X$, $Y$, and $Z$ positions of the quadcopter in the global Cartesian coordinate system, $\alpha_x, \alpha_y, \alpha_z, \beta_x, \beta_y, \beta_z \in \mathbb{R}$ are system parameters, and $u_x, u_y, u_z \in \mathbb{R}$ are control inputs on $X$, $Y$, and $Z$ directions. In this framework:
+With $p_x,p_y,p_z \in \mathbb{R}$ are $X$, $Y$, and $Z$ positions of the quadcopter in the global Cartesian coordinate system, and $u_x, u_y, u_z \in \mathbb{R}$ are control inputs on $X$, $Y$, and $Z$ directions. In this framework:
 - $u_x$ is the pitch angle (in radians),
 - $u_y$ is the roll angle (in radians), and
 - $u_z$ is the vertical velocity (in meters/second).
