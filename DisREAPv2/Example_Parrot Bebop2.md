@@ -76,12 +76,12 @@ The system is discretized with a sampling period of $\Delta T = 0.2$, and the we
 $$
 Q_x = 
 \begin{bmatrix}
-[5 & 0 & 0 & 0 & 0 & 0\\
+5 & 0 & 0 & 0 & 0 & 0\\
   0 & 5 & 0 & 0 & 0 & 0\\
   0 & 0 & 5 & 0 & 0 & 0\\
   0 & 0 & 0 & 5 & 0 & 0\\
   0 & 0 & 0 & 0 & 1000 & 0\\
-  0 & 0 & 0 & 0 & 0 & 1000]
+  0 & 0 & 0 & 0 & 0 & 1000
 \end{bmatrix},
 Q_u =
 \begin{bmatrix}
