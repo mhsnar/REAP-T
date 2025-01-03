@@ -99,7 +99,7 @@ hold on;
 
 
 Sigma=[];
-for iii=1:100
+for iii=1:n
 Sigma=[Sigma;Sigmas{iii}];
 end
 plot(Sigma,LineWidth=2)
