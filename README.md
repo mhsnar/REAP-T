@@ -1,7 +1,7 @@
 # Robust to Early Termination Model Predictive Control Toolbox (REAP-T)
 
 ## 🛠️ Getting Started:
-1. **Extract the YALMIP zip file** to the REAP-T file's location.
+1. **Extract the YALMIP zip file** to the location of the REAP-T file.
 2. **Run the `DisREAP_UI` function** in MATLAB.
 
 ## 🚀 Usage:
