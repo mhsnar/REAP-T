@@ -408,7 +408,7 @@ for inc=1:n
     [hat_u,hatLambda] = Functions.ARMechanism(sigma_hat_u,sigma_hat_u0,hat_u0,hat_u,hatLambda0,hatLambda);
 
     % %Warm Starting
-    [hatLambda,hat_u_0] = Functions.Warmstarting(hatLambda,hat_u,NoS,NoI,Prediction_Horizion,M1,M2,x_pr,Omegastar,theta,K);
+    [hatLambda,hat_u_0] = Functions.Warmstarting(hatLambda,hat_u,NoS,NoI,Prediction_Horizion,M1,M2,Abar*x0+Bbar*hat_u ;,Omegastar,theta,K);
     
 
     u_app(:,inc)=double(hat_u(1:NoI));
