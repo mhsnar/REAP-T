@@ -144,7 +144,7 @@ Qv=eye(size(C,1));
 DeltaT = DeltaTInput.Value;
 Prediction_Horizon = PredictionHorizonInput.Value;
 nSim = nSimInput.Value;
-if strcmp(DynamicsTypeDropdown.Value, 'Discrete')
+if strcmp(DynamicsTypeDropdown.Value, 'Discrete-Time')
     G = ss(A, B, C, D,DeltaT);
     Gc = d2c(G);
     A = Gc.A;
