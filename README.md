@@ -117,8 +117,8 @@ This interface makes it easier to define and simulate discrete-time systems with
 For guidance, the package includes two examples:
 1. **Parrot Bebop 2 Drone**:
    - This example demonstrates the implementation of DisREAP on a Parrot Bebop 2 drone.
-2. **F-16**:
-   - This example showcases DisREAP applied to a second-order dynamic system.
+2. **F-16 Aircraft Model**:
+   - This example showcases DisREAP applied to a F-16 Aircraft Model.
 
 ## ▶️ Running Examples:
 1. **Navigate to the examples directory**:
