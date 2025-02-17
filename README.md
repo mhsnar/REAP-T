@@ -136,7 +136,7 @@ If you use the DisREAP Toolbox, please use the following BibTeX entry:
 
 @INPROCEEDINGS{Amiri:DiscreteREAP,
 AUTHOR="{Mohsen Amiri and Mehdi Hosseinzadeh",
-TITLE="Practical Considerations for Implementing Robust-to-Early Termination Model Predictive Control",
+TITLE="REAP-T: A MATLAB Toolbox for Implementing Robust-to-Early Termination Model Predictive Control",
 BOOKTITLE="..... ",
 ADDRESS="........",
 
