@@ -1,4 +1,4 @@
-function [x, u_app,Sigmas] = computeREAP_Omegastar(Ad, Bd, Cd,Dd,Xconstraints,Uconstraints,x0,Xbar, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizion, Omegastar, n,C)
+function [x, u_app,Sigmas,CostsFunction] = computeREAP_Omegastar(Ad, Bd, Cd,Dd,Xconstraints,Uconstraints,x0,Xbar, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizion, Omegastar, n,C)
 % Compute MPC control action
 % Implement the MPC logic here based on the provided code
 disp('REAP has started!...');
@@ -116,22 +116,22 @@ AbarTu=AbarTu*Abar(NoS * Prediction_Horizion - (NoS-1):NoS * Prediction_Horizion
 Number_of_Constraints=(Prediction_Horizion+Omegastar+1)*(2*size(Xconstraint,1)+2*size(Uconstraint,1));
 
 
-hat_lambda=ones(Number_of_Constraints,1);
+hat_lambda=zeros(Number_of_Constraints,1);
 
-hat_lambda_x1=ones(size(Xconstraint,1)*(Prediction_Horizion),1);
-hat_lambda_x2=ones(size(Xconstraint,1)*Prediction_Horizion,1);
-hat_lambda_u1=ones(size(Uconstraint,1)*Prediction_Horizion,1);
-hat_lambda_u2=ones(size(Uconstraint,1)*Prediction_Horizion,1);
+hat_lambda_x1=zeros(size(Xconstraint,1)*(Prediction_Horizion),1);
+hat_lambda_x2=zeros(size(Xconstraint,1)*Prediction_Horizion,1);
+hat_lambda_u1=zeros(size(Uconstraint,1)*Prediction_Horizion,1);
+hat_lambda_u2=zeros(size(Uconstraint,1)*Prediction_Horizion,1);
 
-hat_lambda_omega_x1=ones(size(Xconstraint,1)*(Omegastar),1);
-hat_lambda_omega_x2=ones(size(Xconstraint,1)*(Omegastar),1);
-hat_lambda_omega_u1=ones(size(Uconstraint,1)*(Omegastar),1);
-hat_lambda_omega_u2=ones(size(Uconstraint,1)*(Omegastar),1);
+hat_lambda_omega_x1=zeros(size(Xconstraint,1)*(Omegastar),1);
+hat_lambda_omega_x2=zeros(size(Xconstraint,1)*(Omegastar),1);
+hat_lambda_omega_u1=zeros(size(Uconstraint,1)*(Omegastar),1);
+hat_lambda_omega_u2=zeros(size(Uconstraint,1)*(Omegastar),1);
 
-hat_lambda_omega_x1_eps=ones(size(Xconstraint,1),1);
-hat_lambda_omega_x2_eps=ones(size(Xconstraint,1),1);
-hat_lambda_omega_u1_eps=ones(size(Uconstraint,1),1);
-hat_lambda_omega_u2_eps=ones(size(Uconstraint,1),1);
+hat_lambda_omega_x1_eps=zeros(size(Xconstraint,1),1);
+hat_lambda_omega_x2_eps=zeros(size(Xconstraint,1),1);
+hat_lambda_omega_u1_eps=zeros(size(Uconstraint,1),1);
+hat_lambda_omega_u2_eps=zeros(size(Uconstraint,1),1);
 
 hat_u=zeros(Prediction_Horizion*size(Uconstraint,1),1);
 hatLambda.x1=hat_lambda_x1;
@@ -155,7 +155,7 @@ Sigmas = [];
 Sigmass = [];
 sigma_values=[];
 Total_Num_REAP=zeros(n,1);
-
+CostsFunction=zeros(n,1);
 for inc=1:n
 
     theta=pinv(MN(1:NoS-NoI,:))*Xbar;
@@ -177,8 +177,6 @@ for inc=1:n
     %% Terminal Conditions
     if inc==1 %Optimization
         yalmip('clear')
-        % theta = sdpvar(3,1,'full');
-        % theta=[r(1) r(3) r(5)]';
         hat_u = sdpvar(NoI*Prediction_Horizion,1,'full');
         xbar=M1*theta;
         ubar=M2*theta;
@@ -235,6 +233,12 @@ for inc=1:n
         Constraints=[Constraint;TConstraints];
         opt=sdpsettings('showprogress',0,'verbose',0);
         sol=optimize(Constraints,sigma,opt);
+
+        if sol.problem~=0
+            error('The specified initial condition is not in the Region of Attractin (RoA). REAP-T cannot proceed with the specified Initial condition.');
+        end
+
+
         clear x_pr Constraint Constraints x_pr errU
         hat_u=double(hat_u);
     else
@@ -244,6 +248,8 @@ for inc=1:n
 
     if inc==1
         u_app=zeros(NoI,1);
+        hat_u0=hat_u;
+        x_initial=x0;
     elseif inc>1
         %
     end
@@ -251,9 +257,8 @@ for inc=1:n
     tic;
     %Samplingtime
     MM=0;
-    hat_u0=hat_u;
     hatLambda0=hatLambda;
-    sigma_hat_u0 = Functions.CostF(r,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u0,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
+    sigma_hat_u0 = Functions.CostF(r,u_des,x_initial,inc,Abar,Bbar,M1Bar,M2Bar,hat_u0,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
     % Primal_dual_gradient_flow
     sigma_values=[];
     Num_REAP=0;
@@ -270,6 +275,7 @@ for inc=1:n
         ErrorX = errX' * QxBar * errX;
         errTX = x_pr(NoS * Prediction_Horizion - (NoS-1):NoS * Prediction_Horizion) - xbar;
         ErrorTX = errTX' * Qn * errTX;
+        sigma = ErrorV+ErrorU + ErrorX + ErrorTX + NormU;
 
         TXConstraints1_eps= M1*theta-0.98*Xconstraint+1/beta;
         TXConstraints2_eps= -M1*theta+0.98*Xconstraint_down+1/beta;
@@ -357,6 +363,11 @@ for inc=1:n
         %%%
         Checkpoint=grad_B_lambda+ Functions.Phi(hatLambda,grad_B_lambda,hat_lambda);
         flag_gammaD=0;
+        % for k=1:length(hat_lambda)
+        %     if hat_lambda(k) <= 1e-10
+        %            hat_lambda(k) = 0; % Set to zero based on conditions
+        %     end
+        % end
         while flag_gammaD==0
             if any((hat_lambda+ds*Sigma*Checkpoint)<0)
                 Sigma=0.95*Sigma;
@@ -405,18 +416,24 @@ for inc=1:n
 
     sigma_hat_u = Functions.CostF(r,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
     %Acceptance,Rejection
-    [hat_u,hatLambda] = Functions.ARMechanism(sigma_hat_u,sigma_hat_u0,hat_u0,hat_u,hatLambda0,hatLambda);
+
+    [hat_u,hatLambda,SD] = Functions.ARMechanism(sigma_hat_u,sigma_hat_u0,hat_u0,hat_u,hatLambda0,hatLambda);
+    CostsFunction(inc)=SD;
+
 
     % %Warm Starting
-    [hatLambda,hat_u_0] = Functions.Warmstarting(hatLambda,hat_u,NoS,NoI,Prediction_Horizion,M1,M2,Abar*x0+Bbar*hat_u ;,Omegastar,theta,K);
-    
+    [hatLambda,hat_u_0] = Functions.Warmstarting(hatLambda,hat_u,NoS,NoI,Prediction_Horizion,M1,M2,Abar*x0+Bbar*hat_u,Omegastar,theta,K);
 
+
+    % sigma_hat_u0=Functions.CostF(r,u_des,x0,inc,Abar,Bbar,M1Bar,M2Bar,hat_u,QxBar,QuBar,Qn,Qv,Prediction_Horizion,NoS,DeltaT,M1,M2,N,u_app,theta);
+    x_initial=x0;
+    hat_u0=hat_u;
     u_app(:,inc)=double(hat_u(1:NoI));
     x(:,inc+1)=Ad*x(:,inc)+Bd*u_app(:,inc);
     hat_u=hat_u_0;
 
 end
- 
 
-    
+
+
 end

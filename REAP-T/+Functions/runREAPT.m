@@ -12,7 +12,7 @@ if strcmp(ModeDropdown.Value, 'Lyapunov-Based')
 [x, u_app,Sigmas] = Functions.computeREAP_Lyapanov(Ad, Bd, Cd,Dd,Xconstraint,Uconstraint,x0,r, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizon, Omegastar, n);
 
 else
-[x, u_app,Sigmas] = Functions.computeREAP_Omegastar(Ad, Bd, Cd,Dd,Xconstraint,Uconstraint,x0,r, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizon, Omegastar, n);
+[x, u_app,Sigmas,CostsFunction] = Functions.computeREAP_Omegastar(Ad, Bd, Cd,Dd,Xconstraint,Uconstraint,x0,r, NoS, NoI, NoO, Qx, Qu, Qv, DeltaT, Prediction_Horizon, Omegastar, n);
 
 end
 % save('results.mat', 'x', 'u_app', 'Sigmas', 'AllConstraints');
@@ -20,6 +20,7 @@ assignin('base', 'x', x);
 assignin('base', 'u_app', u_app);
 assignin('base', 'Sigmas', Sigmas);
 assignin('base', 'AllConstraints', AllConstraints);
+assignin('base', 'CostsFunction', CostsFunction);
 disp('REAP ended!');
 disp('Plotting the graphs has started!...');
 plotFlags = [checkbox1.Value, checkbox2.Value, checkbox3.Value,checkbox4.Value]; % Logical array for plot states

@@ -155,10 +155,10 @@ ModeDropdown = uidropdown(fig, ...
 
 % Add checkboxes for plot activation
 uilabel(fig, 'Text', 'Select Plots:', 'Position', [420 240-130 100 22]);
-checkbox1 = uicheckbox(fig, 'Text', 'States', 'Position', [640 240-130 100 22]);
-checkbox2 = uicheckbox(fig, 'Text', 'Control Inputs', 'Position', [530 240-130 100 22]);
-checkbox3 = uicheckbox(fig, 'Text', 'Output', 'Position', [640 210-120 100 22]);
-checkbox4 = uicheckbox(fig, 'Text', 'Sigma', 'Position', [530 210-130 100 22]);
+checkbox1 = uicheckbox(fig, 'Text', 'States', 'Position', [640 240-130 100 22],'Value',1);
+checkbox2 = uicheckbox(fig, 'Text', 'Control Inputs', 'Position', [530 240-130 100 22],'Value',1);
+checkbox3 = uicheckbox(fig, 'Text', 'Output', 'Position', [640 210-120 100 22],'Value',1);
+checkbox4 = uicheckbox(fig, 'Text', 'Sigma', 'Position', [530 210-130 100 22],'Value',1);
 
 % Add a button to trigger the MPC calculation
 btn = uibutton(fig, 'Text', 'Run REAP', 'Position', [350 30 100 20], ...

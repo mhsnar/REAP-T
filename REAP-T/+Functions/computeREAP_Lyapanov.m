@@ -107,22 +107,22 @@ end
 Number_of_Constraints=(Prediction_Horizion+2)*(2*size(Xconstraint,1)+2*size(Uconstraint,1));
 
 
-hat_lambda=ones(Number_of_Constraints,1);
+hat_lambda=zeros(Number_of_Constraints,1);
 
-hat_lambda_x1=ones(size(Xconstraint,1)*(Prediction_Horizion),1);
-hat_lambda_x2=ones(size(Xconstraint,1)*Prediction_Horizion,1);
-hat_lambda_u1=ones(size(Uconstraint,1)*Prediction_Horizion,1);
-hat_lambda_u2=ones(size(Uconstraint,1)*Prediction_Horizion,1);
+hat_lambda_x1=zeros(size(Xconstraint,1)*(Prediction_Horizion),1);
+hat_lambda_x2=zeros(size(Xconstraint,1)*Prediction_Horizion,1);
+hat_lambda_u1=zeros(size(Uconstraint,1)*Prediction_Horizion,1);
+hat_lambda_u2=zeros(size(Uconstraint,1)*Prediction_Horizion,1);
 
-hat_lambda_omega_x1=ones(size(Xconstraint,1),1);
-hat_lambda_omega_x2=ones(size(Xconstraint,1),1);
-hat_lambda_omega_u1=ones(size(Uconstraint,1),1);
-hat_lambda_omega_u2=ones(size(Uconstraint,1),1);
+hat_lambda_omega_x1=zeros(size(Xconstraint,1),1);
+hat_lambda_omega_x2=zeros(size(Xconstraint,1),1);
+hat_lambda_omega_u1=zeros(size(Uconstraint,1),1);
+hat_lambda_omega_u2=zeros(size(Uconstraint,1),1);
 
-hat_lambda_omega_x1_eps=ones(size(Xconstraint,1),1);
-hat_lambda_omega_x2_eps=ones(size(Xconstraint,1),1);
-hat_lambda_omega_u1_eps=ones(size(Uconstraint,1),1);
-hat_lambda_omega_u2_eps=ones(size(Uconstraint,1),1);
+hat_lambda_omega_x1_eps=zeros(size(Xconstraint,1),1);
+hat_lambda_omega_x2_eps=zeros(size(Xconstraint,1),1);
+hat_lambda_omega_u1_eps=zeros(size(Uconstraint,1),1);
+hat_lambda_omega_u2_eps=zeros(size(Uconstraint,1),1);
 
 hat_u=zeros(Prediction_Horizion*size(Uconstraint,1),1);
 hatLambda.x1=hat_lambda_x1;
