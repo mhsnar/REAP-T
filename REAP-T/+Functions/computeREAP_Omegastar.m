@@ -235,7 +235,7 @@ for inc=1:n
         sol=optimize(Constraints,sigma,opt);
 
         if sol.problem~=0
-            error('The specified initial condition is not in the Region of Attractin (RoA). REAP-T cannot proceed with the specified Initial condition.');
+            error('The specified initial condition does not belong to the region of attraction. REAP-T cannot proceed.');
         end
 
 
