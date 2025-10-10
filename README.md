@@ -133,15 +133,12 @@ For any issues or questions, please refer to the [issues page](https://github.co
 
 If you use the DisREAP Toolbox, please use the following BibTeX entry:
 ```bibtex
-
-@INPROCEEDINGS{Amiri:REAP-T,
-AUTHOR="{Mohsen Amiri and Mehdi Hosseinzadeh",
-TITLE="REAP-T: A MATLAB Toolbox for Implementing Robust-to-Early Termination Model Predictive Control",
-BOOKTITLE="..... ",
-ADDRESS="........",
-
-ABSTRACT="........."}
-
+@article{amiri2025reap,
+  title={REAP-T: A MATLAB Toolbox for Implementing Robust-to-Early Termination Model Predictive Control},
+  author={Amiri, Mohsen and Hosseinzadeh, Mehdi},
+  journal={arXiv preprint arXiv:2507.00863},
+  year={2025}
+}
 
 
 
