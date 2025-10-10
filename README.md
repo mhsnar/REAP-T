@@ -130,7 +130,7 @@ For guidance, the package includes two examples:
    - Follow the instructions in the example scripts to see the results and understand how to set up and execute your own system.
 
 ## 🤝 Support:
-For any issues or questions, please refer to the [issues page](https://github.com/mhsnar/DiscreteREAP/issues) on GitHub.
+For any issues or questions, please refer to the [issues page](https://github.com/mhsnar/REAP-T/issues) on GitHub.
 
 ## Citing DisREAP:
 
