@@ -1,3 +1,5 @@
+![REAP-T Overview](Picture3.png)
+
 # Robust to Early Termination Model Predictive Control Toolbox (REAP-T)
 
 ## 🛠️ Getting Started:
