@@ -1,5 +1,6 @@
 ![REAP-T Overview](Picture1.png)
 ![REAP-T Demo GIF](REAP.gif)
+<img src="REAP.gif" alt="REAP-T Demo GIF" width="500">
 # Robust to Early Termination Model Predictive Control Toolbox (REAP-T)
 
 ## 🛠️ Getting Started:
