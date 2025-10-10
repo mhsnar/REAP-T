@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="reap_demo.gif" alt="REAP-T Demo GIF" width="500">
-</p>
 
 # Robust to Early Termination Model Predictive Control Toolbox (REAP-T)
 
@@ -15,6 +12,9 @@
 
    
 ## 📋 **Input Fields Explained**
+<p align="center">
+  <img src="reap_demo.gif" alt="REAP-T Demo GIF" width="500">
+</p>
 
 
 ### **System Matrices**
