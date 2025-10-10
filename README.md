@@ -1,5 +1,6 @@
 <img src="REAP.gif" alt="REAP-T Demo GIF" width="500">
-### Robust to Early Termination Model Predictive Control Toolbox (REAP-T)
+
+# Robust to Early Termination Model Predictive Control Toolbox (REAP-T)
 
 ## 🛠️ Getting Started:
 1. **Extract the YALMIP zip file** to the location of the REAP-T file.
