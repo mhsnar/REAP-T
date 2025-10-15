@@ -6,11 +6,11 @@
 
 ## 🛠️ Getting Started:
 1. **Extract the YALMIP zip file** to the location of the REAP-T file.
-2. **Run the `DisREAP_UI` function** in MATLAB.
+2. **Run the `REAPT_GUI` function** in MATLAB.
 
 ## 🚀 Usage:
 1. **Import your system and desired configurations**:
-   - After running `DisREAP_UI`, import your system model and specify your desired configurations,  enable plots, and simulate the system to observe results.
+   - After running `REAPT_GUI`, import your system model and specify your desired configurations,  enable plots, and simulate the system to observe results.
 2. **Execute the package** to start the control process.
 
    
@@ -119,9 +119,9 @@ This interface makes it easier to define and simulate discrete-time systems with
 ## 📚 Examples:
 For guidance, the package includes two examples:
 1. **Parrot Bebop 2 Drone**:
-   - This example demonstrates the implementation of DisREAP on a Parrot Bebop 2 drone.
+   - This example demonstrates the implementation of REAPT on a Parrot Bebop 2 drone.
 2. **F-16 Aircraft Model**:
-   - This example showcases DisREAP applied to a F-16 Aircraft Model.
+   - This example showcases REAPT applied to a F-16 Aircraft Model.
 
 ## ▶️ Running Examples:
 1. **Navigate to the examples directory**:
@@ -132,9 +132,9 @@ For guidance, the package includes two examples:
 ## 🤝 Support:
 For any issues or questions, please refer to the [issues page](https://github.com/mhsnar/REAP-T/issues) on GitHub.
 
-## Citing DisREAP:
+## Citing REAP-T:
 
-If you use the DisREAP Toolbox, please use the following BibTeX entry:
+If you use the REAP Toolbox, please use the following BibTeX entry:
 ```bibtex
 @article{amiri2025reap,
   title={REAP-T: A MATLAB Toolbox for Implementing Robust-to-Early Termination Model Predictive Control},
